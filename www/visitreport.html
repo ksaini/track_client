@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
+    <!-- Good default declaration:
+    * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+    * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+    * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+        * Enable inline JS: add 'unsafe-inline' to default-src
+        * Enable eval(): add 'unsafe-eval' to default-src
+    * Create your own at http://cspisawesome.com
+    -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
+	 <script src="./js/jquery.min.js"></script>
+	<script src="./assets/js/bootstrap.min.js"></script>
+	
+	<link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+	<link rel="stylesheet" href="./assets/css/bootstrap.min.css">
+	<link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
+	<link href="assets/css/light-bootstrap-dashboard.css" rel="stylesheet" />
+	<link href="assets/css/demo.css" rel="stylesheet" />
+	
+	
+    <title>Visit Report</title>
+	<style>
+	.row {
+		margin-right: 5px;
+		margin-top: 5px;
+		margin-left: 10px;
+		}
+	.container-fluid {
+		padding-right: 0px;
+		padding-left: 0px;
+	}
+	.col-lg-1,
+.col-lg-10,
+.col-lg-11,
+.col-lg-12,
+.col-lg-2,
+.col-lg-3,
+.col-lg-4,
+.col-lg-5,
+.col-lg-6,
+.col-lg-7,
+.col-lg-8,
+.col-lg-9,
+.col-md-1,
+.col-md-10,
+.col-md-11,
+.col-md-12,
+.col-md-2,
+.col-md-3,
+.col-md-4,
+.col-md-5,
+.col-md-6,
+.col-md-7,
+.col-md-8,
+.col-md-9,
+.col-sm-1,
+.col-sm-10,
+.col-sm-11,
+.col-sm-12,
+.col-sm-2,
+.col-sm-3,
+.col-sm-4,
+.col-sm-5,
+.col-sm-6,
+.col-sm-7,
+.col-sm-8,
+.col-sm-9,
+.col-xs-1,
+.col-xs-10,
+.col-xs-11,
+.col-xs-12,
+.col-xs-2,
+.col-xs-3,
+.col-xs-4,
+.col-xs-5,
+.col-xs-6,
+.col-xs-7,
+.col-xs-8,
+.col-xs-9 {
+    position: relative;
+    min-height: 1px;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+.container-fluid>.navbar-collapse,
+.container-fluid>.navbar-header,
+.container>.navbar-collapse,
+.container>.navbar-header {
+    margin-right: 0px;
+    margin-left: 0px;
+}
+.nav>li>a {
+    position: relative;
+    display: block;
+    padding: 10px 5px
+}
+.card .content {
+    padding: 10px 10px 5px 5px; }
+	</style>
+	<script> var c=0;</script>
+</head>
+
+<body >
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="dashboard.html">GreyBox CLient</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="dashboard.html">&nbsp;Home</a></li>
+        <li class="dropdown">
+		  <a href="index.html" onclick="localStorage['eid']='';document.location='index.html'">&nbsp;&nbsp;Logout</a>
+        </li>
+        <!----<li><a href="#">&nbsp;&nbsp;View Agents </a></li>---->
+      </ul>
+      
+    </div>
+  </div>
+</nav>
+
+<div class="content" id='mainbody'>
+	<div class="container-fluid">
+		
+		<div class="tab-content">
+			<!-----<div class="panel panel-default tab-pane fade in active" id="default">----->
+				<div class="card" >
+					<div class="panel-body">
+						
+						<div class="row " id='searchdiv' >
+							<div class="content col-md-10 col-xs-10 ">
+								<label>Select Dealer : </label><select class="form-control text-muted input-sm" name='class'  id='class'  style='font-size: 85%;'></select>
+							</div>
+							<div class="content col-md-2 col-xs-2 "><br><button type='button'   onClick="getDealer()">Go</button></div>
+						</div>
+					<div class="tab-content" id='info' style='display:none;'>
+						<ul class="nav nav-tabs" style='font-size: 85%;'>					
+							<li class='active'><a data-toggle='tab' href='#one' style='color:black;'><small>Discussions</small></a></li>
+							<li><a data-toggle='tab' href='#two' style='color:black;'><small>Orders</small></a></li>
+							<li><a data-toggle='tab' href='#three' style='color:black;'><small>Next Visit</small></a></li>
+							
+						</ul><br>
+						<div class="panel panel-default tab-pane fade in active" id="one" style="border-style: none">
+						<div class="row " >
+							
+							<select class="form-control text-muted input-sm" name='contact'  id='contact'  style='font-size: 85%;'></select><br>
+							<textarea class="form-control" rows="5" id="discussion"></textarea>
+						</div>
+						</div>
+						
+						<div class="panel panel-default tab-pane fade in " id="two">
+							<!---<div class="card" style="padding: 5px 5px 10px 10px;">--->
+						<br>
+					<div class="form-group row" style="margin-bottom:1px">
+						<div class="col-xs-8">
+							<label for="ex1">Item List<br>.</label><br>
+							
+						</div>
+						<div class="col-xs-2">
+							<label for="ex2">Qty</label><br>
+							
+						</div>
+						<div class="col-xs-2">
+							<label for="ex2">Price</label><br>
+						</div>
+						
+					</div>
+					<div class="form-group row">
+						<div class="col-xs-7">
+							<select class="form-control text-muted input-sm" name='order'  id='order'  style='font-size: 85%;'></select>
+						</div>
+						<div class="col-xs-2">
+							<input class="form-control text-muted input-sm" id="qty" type="text" style='font-size: 85%;'>
+						</div>
+						<div class="col-xs-2">
+							<input class="form-control text-muted input-sm" id="price" type="text" style='font-size: 85%;'>
+						</div>
+						<div class="col-xs-1" style='font-size: 125%;text-align:center'>
+							<a href="#" onclick='addorder();'>+</a>
+						</div>
+					</div>
+					<div class="form-group row text-muted" id='newitem' style='font-size: 75%;'><br>
+					</div>
+					<script>
+					function addorder(){
+						var item = document.getElementById('order').value;
+						var qty = document.getElementById('qty').value;
+						var price = document.getElementById('price').value;
+						
+						var e = document.getElementById("order");
+						var itemname = e.options[e.selectedIndex].text;
+						c=c+1;
+						
+						document.getElementById('newitem').innerHTML += "<div id='item"+c+"'><div class='col-xs-7' id='ii"+c+"'>" + itemname + "</div><div class='col-xs-2' id='qq"+c+"'>"+ qty + "</div><div class='col-xs-2' id='pp"+c+"'>" + price +"</div><div class='col-xs-1' style='font-size: 125%;text-align:center'><a href='#' onclick='removeorder(this);'>-</a></div></div><br>";
+						
+					}	
+					</script>
+					
+                <!----</div>---->
+						</div>
+						
+						<div class="panel panel-default tab-pane fade in " id="three" style="border-style: none">
+						
+							<div class="form-group row" style="margin-bottom:5px">
+								<div class="col-xs-8 text-muted " style='font-size: 65%;'>
+								 <input  type="checkbox" name="nxtvisit" id="nxtvisit" value="1" onclick="handleClick(this);"> &nbsp;Schedule Next Visit<br><br><br>
+								</div>
+							</div>	
+							<div class="form-group row text-muted"  style="margin-bottom:5px;font-size: 85%;" >
+								<input type="date" id='r2' name="nxtdate" disabled><label style="font-size: 95%;" > &nbsp;&nbsp;Schedult a Date</label>
+							</div>
+							<div class="form-group row"  style="margin-bottom:5px" >
+								<textarea class="form-control" id='r3' rows="5"  placeholder="To do for next visit." disabled></textarea>
+							</div>
+							
+							<div class="form-group row" style="margin-bottom:15px"><br>
+								<button type='button-sm ' class='text-muted btn btn-positive'   onClick="getLocation();"  >Save Visit</button><br><br>
+							</div>
+							
+							
+						</div>
+							
+							</div>
+						</div>
+						
+						
+					</div>
+					</div>
+				</div>
+					
+			<!----</div>---->	
+	</div>	
+</div>
+
+</body>
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript" src="js/dataTbl.js"></script>
+
+<script>
+	pingloc();
+	var did;
+	//var base_url = document.URL.substr(0,document.URL.lastIndexOf('/'));
+	var base_url = "http://theqalabs.com/track/";
+	var req = new XMLHttpRequest();
+		req.onreadystatechange = function() {
+		if (req.readyState == 4 && req.status == 200) {
+			var dataArray=JSON.parse(req.responseText);
+			updateDD(dataArray,'class');
+		}
+		
+		};
+		
+		req.open("GET", base_url + "/getTbl.php?agentid="+ localStorage["sid"], true);
+		req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		req.send();
+
+</script>
+<script>
+
+
+function handleClick(cb) {
+  if(cb.checked){
+	document.getElementById('r2').disabled = false;
+	document.getElementById('r3').disabled = false;
+  }
+  else{
+	document.getElementById('r2').disabled = true;
+	document.getElementById('r3').disabled = true;
+  }
+}
+
+function getLocation(){
+	
+      navigator.geolocation.getCurrentPosition(saveVisit,onError);
+}
+function onError(error) {
+		loc = ["0","0"];		
+    }
+
+	  
+function getDealer(){
+		did = document.getElementById('class').value;
+	
+		var req = new XMLHttpRequest();
+		req.onreadystatechange = function() {
+		if (req.readyState == 4 && req.status == 200) {
+			var data=JSON.parse(req.responseText);
+			var d = "<div class='row ' ><div class='content col-md-4 col-xs-4'><label>Firm Name : </label>";
+			d += "<p style='font-size:75%'>" + data[0]['firmname'] + "</p></div>";
+			d += "<div class='content col-md-6 col-xs-6'><label>Address : </label>";
+			d += "<p style='font-size:70%'>" + data[0]['addr'] + "</p></div>";
+			d += "<div class='content col-md-2 col-xs-2'><img src='./img/search.png' class='img-responsive' width='20' height='20' onclick='location.reload();' >";
+			d +="</div></div>";
+			document.getElementById('info').style.display = 'block' ;
+			document.getElementById('searchdiv').innerHTML=d;
+			
+			getDropDownData('contact','SELECT id, concat(name,"-",designation) as user from t_contact_tbl where did='+did+';');
+		}
+		
+		};
+		var base_url = "http://theqalabs.com/track/";
+		req.open("GET", base_url + "/getTbl.php?did="+ did, true);
+		req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		req.send();
+  
+}
+function removeorder(ele){
+	var e = ele.parentNode.parentNode;
+	var element = e;//document.getElementById("item1");
+	element.parentNode.removeChild(element);
+	c--;
+}
+
+function saveVisit(position){
+ 
+	var discuss  = document.getElementById('discussion').value;
+	var contact = "";
+	var e = document.getElementById("contact");
+	try{
+	 contact = e.options[e.selectedIndex].text;
+	}catch(err) {
+	 contact =""
+	}
+	
+	//define discussion array
+	var discussion = [discuss,contact];
+	
+	// declear order json
+	var order = {
+			details: []
+		};
+	
+	var newitem = document.getElementById("newitem");
+	var child = newitem.firstChild;
+	
+	var str='';
+	for(var i=1;i<=c;i++){
+		str += document.getElementById('ii'+i).innerHTML + "-" + document.getElementById('qq'+i).innerHTML + "<br>";
+		order.details.push({ 
+				"item" : document.getElementById('ii'+i).innerHTML,
+				"qty"  : document.getElementById('qq'+i).innerHTML,
+				"price"       : document.getElementById('pp'+i).innerHTML 
+		});
+	}
+	
+	
+	// define next visit array
+	if(document.getElementById('nxtvisit').checked){
+		var visit = [document.getElementById('r2').value,document.getElementById('r3').value];
+	}
+	else
+		var visit = ['',''];
+	
+	loc = [position.coords.latitude,position.coords.longitude];
+	
+	saveMeetingDetails(discussion,order,visit);
+	//alert("contact : " + JSON.stringify(discussion) + " - " + JSON.stringify(order.details) + " todo: " + JSON.stringify(visit));
+}
+
+function saveMeetingDetails(discussion,order,visit,){
+	var q = "discussion=" + JSON.stringify(discussion) + "&order=" + JSON.stringify(order.details) + "&visit=" + JSON.stringify(visit) + "&lat=" + loc[0] + "&long=" + loc[1] + "&did=" + did;
+	var req = new XMLHttpRequest();
+	req.onreadystatechange = function() {
+		if (req.readyState == 4 && req.status == 200) {
+			if(req.responseText.length < 15)
+				document.getElementById('mainbody').innerHTML = "<p style='font-size:38px;color:#4CAF50;text-align:center;margin-top:200px;'>Success</p><br><p class='text-muted' style='line-height:1.0;text-align:center'><small>Meeting record saved!!</small></p>"
+			else	
+				alert(req.responseText);
+			}
+		
+		};
+		var base_url = "http://theqalabs.com/track/";
+		req.open("POST", base_url + "/saveMeeting.php", true);
+		req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		req.send(q);
+		//alert(q);
+}
+
+getDropDownData('order','SELECT id, concat(code,"-",name) as item from t_item_tbl ;');
+</script>
+ 
+</html>
