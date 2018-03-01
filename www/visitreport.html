@@ -312,7 +312,7 @@ function getDealer(){
 			document.getElementById('info').style.display = 'block' ;
 			document.getElementById('searchdiv').innerHTML=d;
 			
-			getDropDownData('contact','SELECT id, concat(name,"-",designation) as user from t_contact_tbl where did='+did+';');
+			getDropDownData('contact','__!dealer_contact_01,' + did + ';');
 		}
 		
 		};
@@ -376,7 +376,7 @@ function saveVisit(position){
 }
 
 function saveMeetingDetails(discussion,order,visit,){
-	var q = "discussion=" + JSON.stringify(discussion) + "&order=" + JSON.stringify(order.details) + "&visit=" + JSON.stringify(visit) + "&lat=" + loc[0] + "&long=" + loc[1] + "&did=" + did;
+	var q = "discussion=" + JSON.stringify(discussion) + "&order=" + JSON.stringify(order.details) + "&visit=" + JSON.stringify(visit) + "&lat=" + loc[0] + "&long=" + loc[1] + "&did=" + did + "&agent=" + localStorage["sid"];
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
 		if (req.readyState == 4 && req.status == 200) {
@@ -394,7 +394,7 @@ function saveMeetingDetails(discussion,order,visit,){
 		//alert(q);
 }
 
-getDropDownData('order','SELECT id, concat(code,"-",name) as item from t_item_tbl ;');
+getDropDownData('order','item_list_01');
 </script>
  
 </html>

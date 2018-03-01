@@ -12,6 +12,7 @@ function pingloc(){
 				
 		var currtime = new Date().getTime();
 		
+		
 		if( (currtime -localStorage['lastPing']) > pingFreq ){
 			navigator.geolocation.getCurrentPosition(pingSuccess,pingError);
 			localStorage['lastPing'] = currtime;
