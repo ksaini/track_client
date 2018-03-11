@@ -3,7 +3,7 @@ var schoolname= "JSS Public School";
 var address ="Sector 71, Delhi";
 var scn1 = "";
 var pingFreq = 60; // Frequency with which location info to be shared
-var base_url = "http://theqalabs.com/track/";
+var base_url = "http://greyboxerp.com/track/";
 
 
 function pingloc(){
@@ -40,7 +40,7 @@ function pingSuccess(position){
 			}
 	};
 	
-	var base_url = "http://theqalabs.com/track/";//
+	//var base_url = "http://theqalabs.com/track/";//
 	
 	req.open("GET", base_url + "/listener.php?agentid="+localStorage['sid'] + "&lat=" + position.coords.latitude + "&long=" + position.coords.longitude + "&ts=" + ts.toDateInputValue() , true);
 	req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -172,7 +172,7 @@ function getDropDownData(ddId,q) {
 		}
 	};
 	
-	var base_url = "http://theqalabs.com/track/";
+	//var base_url = "http://theqalabs.com/track/";
 	//var base_url = document.URL.substr(0,document.URL.lastIndexOf('/'));
 	
 	req.open("GET", base_url + "/dataTbl.php?" + sql, true);
@@ -296,7 +296,7 @@ function insertData(tbl,colList,valList,flg){
 		}
 	};
 	
-	var base_url = "http://theqalabs.com/track/";
+	//var base_url = "http://theqalabs.com/track/";
 	//var base_url = document.URL.substr(0,document.URL.lastIndexOf('/'));
 	
 	req.open("POST", base_url + "/dataInsert.php", true);
@@ -359,7 +359,7 @@ function postData(q,msg) {
 		}
 	};
 	
-	var base_url = "http://theqalabs.com/track/";
+	//var base_url = "http://theqalabs.com/track/";
 	//var base_url = document.URL.substr(0,document.URL.lastIndexOf('/'));
 	
 	req.open("POST", base_url + "/dataTbl.php", true);
@@ -391,7 +391,7 @@ function postTblData(q,tblId,f){
 		}
 		};
 	
-		var base_url = "http://theqalabs.com/track/";
+		//var base_url = "http://theqalabs.com/track/";
 		//var base_url = document.URL.substr(0,document.URL.lastIndexOf('/'));
 	
 		req.open("POST", base_url + "/" +f, true);
@@ -477,7 +477,7 @@ function saveTblData(tbl,c,t,f){
 		}
 	};
 	
-	var base_url = "http://theqalabs.com/track/";
+	//var base_url = "http://theqalabs.com/track/";
 	//var base_url = document.URL.substr(0,document.URL.lastIndexOf('/'));
 	
 	req.open("POST", base_url + "/userLogin.php", true);

@@ -153,16 +153,25 @@
 					<div class="tab-content" id='info' style='display:none;'>
 						<ul class="nav nav-tabs" style='font-size: 85%;'>					
 							<li class='active'><a data-toggle='tab' href='#one' style='color:black;'><small>Discussions</small></a></li>
-							<li><a data-toggle='tab' href='#two' style='color:black;'><small>Orders</small></a></li>
-							<li><a data-toggle='tab' href='#three' style='color:black;'><small>Next Visit</small></a></li>
+							<li><a data-toggle='tab' href='#two' style='color:black;' id="t1"><small>Orders</small></a></li>
+							<li><a data-toggle='tab' href='#three' style='color:black;' id="t2"><small>Next Visit</small></a></li>
 							
 						</ul><br>
 						<div class="panel panel-default tab-pane fade in active" id="one" style="border-style: none">
 						<div class="row " >
-							
-							<select class="form-control text-muted input-sm" name='contact'  id='contact'  style='font-size: 85%;'></select><br>
-							<textarea class="form-control" rows="5" id="discussion"></textarea>
+							<div class="content col-md-10 col-xs-10 ">
+								<select class="form-control text-muted input-sm" name='contact'  id='contact'  style='font-size: 85%;'></select><br>
+							</div>
+							<div class="content col-md-2 col-xs-2 ">
+								<button type='button-sm ' onclick="document.getElementById('t1').click();return false;" class='btn btn-positive pull-left' >Add Contact</button>
+							</div>
 						</div>
+						<div class="row " >
+							<div class="content col-md-12 col-xs-12 ">
+							<textarea class="form-control" rows="5" id="discussion"></textarea>
+							</div>
+						</div><br>
+						<button type='button-sm ' onclick="document.getElementById('t1').click();return false;" class='btn btn-positive pull-right' >Next</button>
 						</div>
 						
 						<div class="panel panel-default tab-pane fade in " id="two">
@@ -198,7 +207,7 @@
 					</div>
 					<div class="form-group row text-muted" id='newitem' style='font-size: 75%;'><br>
 					
-					</div>
+					</div><br>
 					<script>
 					function addorder(){
 						var item = document.getElementById('order').value;
@@ -215,7 +224,7 @@
 					</script>
 					
                 <!----</div>---->
-						
+						<button type='button-sm ' onclick="document.getElementById('t2').click();return false;" class='btn btn-positive pull-right' >Next</button>
 						</div>
 						
 						<div class="panel panel-default tab-pane fade in " id="three" style="border-style: none">
@@ -260,7 +269,7 @@
 	pingloc();
 	var did;
 	//var base_url = document.URL.substr(0,document.URL.lastIndexOf('/'));
-	var base_url = "http://theqalabs.com/track/";
+	//var base_url = "http://theqalabs.com/track/";
 	var req = new XMLHttpRequest();
 		req.onreadystatechange = function() {
 		if (req.readyState == 4 && req.status == 200) {
@@ -318,7 +327,7 @@ function getDealer(){
 		}
 		
 		};
-		var base_url = "http://theqalabs.com/track/";
+		//var base_url = "http://theqalabs.com/track/";
 		req.open("GET", base_url + "/getTbl.php?did="+ did, true);
 		req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		req.send();
@@ -389,7 +398,7 @@ function saveMeetingDetails(discussion,order,visit,){
 			}
 		
 		};
-		var base_url = "http://theqalabs.com/track/";
+		//var base_url = "http://theqalabs.com/track/";
 		req.open("POST", base_url + "/saveMeeting.php", true);
 		req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		req.send(q);
