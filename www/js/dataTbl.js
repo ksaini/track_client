@@ -3,8 +3,9 @@ var schoolname= "JSS Public School";
 var address ="Sector 71, Delhi";
 var scn1 = "";
 var pingFreq = 60; // Frequency with which location info to be shared
-var base_url = "http://greyboxerp.com/track/";
-
+var off_dis = [];
+var base_url = "http://theqalabs.com/track/";
+//var base_url = "http://greyboxerp.com/track/";
 
 function pingloc(){
 	
@@ -22,7 +23,7 @@ function pingloc(){
 }
 
 function pingSuccess(position){
-	
+		
 	Date.prototype.toDateInputValue = (function() {
     var local = new Date(this);
     local.setMinutes(this.getMinutes() - this.getTimezoneOffset());

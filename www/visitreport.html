@@ -18,7 +18,7 @@
     * Create your own at http://cspisawesome.com
     -->
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
-	 <script src="./js/jquery.min.js"></script>
+	<script src="./js/jquery.min.js"></script>
 	<script src="./assets/js/bootstrap.min.js"></script>
 	
 	<link href="assets/css/bootstrap.min.css" rel="stylesheet" />
@@ -27,6 +27,8 @@
 	<link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
 	<link href="assets/css/light-bootstrap-dashboard.css" rel="stylesheet" />
 	<link href="assets/css/demo.css" rel="stylesheet" />
+
+<link href="assets/css/font-awesome.min.css" rel="stylesheet">
 	
 	
     <title>Visit Report</title>
@@ -159,11 +161,11 @@
 						</ul><br>
 						<div class="panel panel-default tab-pane fade in active" id="one" style="border-style: none">
 						<div class="row " >
-							<div class="content col-md-10 col-xs-10 ">
+							<div class="content col-md-9 col-xs-9 ">
 								<select class="form-control text-muted input-sm" name='contact'  id='contact'  style='font-size: 85%;'></select><br>
 							</div>
-							<div class="content col-md-2 col-xs-2 ">
-								<button type='button-sm ' onclick="document.getElementById('t1').click();return false;" class='btn btn-positive pull-left' >Add Contact</button>
+							<div class="content col-md-1 col-xs-1 ">
+								<button type='button-sm ' onclick="document.getElementById('t1').click();return false;" class='btn btn-sm btn-positive pull-left' >+Contact</button>
 							</div>
 						</div>
 						<div class="row " >
@@ -171,7 +173,7 @@
 							<textarea class="form-control" rows="5" id="discussion"></textarea>
 							</div>
 						</div><br>
-						<button type='button-sm ' onclick="document.getElementById('t1').click();return false;" class='btn btn-positive pull-right' >Next</button>
+						<button type='button-sm ' onclick="document.getElementById('t1').click();return false;" class='btn btn-sm btn-positive pull-right' >Next</button>
 						</div>
 						
 						<div class="panel panel-default tab-pane fade in " id="two">
@@ -224,7 +226,7 @@
 					</script>
 					
                 <!----</div>---->
-						<button type='button-sm ' onclick="document.getElementById('t2').click();return false;" class='btn btn-positive pull-right' >Next</button>
+						<button type='button-sm ' onclick="document.getElementById('t2').click();return false;" class='btn btn-sm btn-positive pull-right' >Next</button>
 						</div>
 						
 						<div class="panel panel-default tab-pane fade in " id="three" style="border-style: none">
@@ -235,16 +237,18 @@
 								</div>
 							</div>	
 							<div class="form-group row text-muted"  style="margin-bottom:5px;font-size: 85%;" >
-								<input type="date" id='r2' name="nxtdate" disabled><label style="font-size: 95%;" > &nbsp;&nbsp;Schedult a Date</label>
+								<input type="date" id='r2' name="nxtdate" disabled>
+								<label style="font-size: 95%;" > &nbsp;&nbsp;Schedult a Date</label>
 							</div>
+							
 							<div class="form-group row"  style="margin-bottom:5px" >
 								<textarea class="form-control" id='r3' rows="5"  placeholder="To do for next visit." disabled></textarea>
 							</div>
 							
 							<div class="form-group row" style="margin-bottom:15px"><br>
-								<button type='button-sm ' class='text-muted btn btn-positive'   onClick="getLocation();"  >Save Visit</button><br><br>
+								<button type='button-sm ' class='text-muted btn btn-sm btn-positive'   onClick="getLocation();"  >Save Visit</button><br><br>
 							</div>
-							
+							<div id="errmsg" style="font-size:10px;color:red;" ></div>
 							
 						</div>
 							
@@ -268,12 +272,17 @@
 <script>
 	pingloc();
 	var did;
-	//var base_url = document.URL.substr(0,document.URL.lastIndexOf('/'));
-	//var base_url = "http://theqalabs.com/track/";
+		
+	try{
+	    var dataArray=JSON.parse(localStorage.getItem("dealers"));
+		updateDD(dataArray,'class');
+	} catch(err){}
+	
 	var req = new XMLHttpRequest();
 		req.onreadystatechange = function() {
 		if (req.readyState == 4 && req.status == 200) {
 			var dataArray=JSON.parse(req.responseText);
+			localStorage.setItem("dealers",req.responseText);
 			updateDD(dataArray,'class');
 		}
 		
@@ -308,21 +317,14 @@ function onError(error) {
 
 	  
 function getDealer(){
+		
 		did = document.getElementById('class').value;
-	
+
 		var req = new XMLHttpRequest();
 		req.onreadystatechange = function() {
 		if (req.readyState == 4 && req.status == 200) {
 			var data=JSON.parse(req.responseText);
-			var d = "<div class='row ' ><div class='content col-md-4 col-xs-4'><label>Firm Name : </label>";
-			d += "<p style='font-size:75%'>" + data[0]['firmname'] + "</p></div>";
-			d += "<div class='content col-md-6 col-xs-6'><label>Address : </label>";
-			d += "<p style='font-size:70%'>" + data[0]['addr'] + "</p></div>";
-			d += "<div class='content col-md-2 col-xs-2'><img src='./img/search.png' class='img-responsive' width='20' height='20' onclick='location.reload();' >";
-			d +="</div></div>";
-			document.getElementById('info').style.display = 'block' ;
-			document.getElementById('searchdiv').innerHTML=d;
-			
+			displayDealer(data[0]['firmname'],data[0]['addr']);
 			getDropDownData('contact','__!dealer_contact_01,' + did + ';');
 		}
 		
@@ -332,6 +334,17 @@ function getDealer(){
 		req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		req.send();
   
+}
+
+function displayDealer(fname,addr){
+	var d = "<div class='row ' ><div class='content col-md-4 col-xs-4'><label>Firm Name : </label>";
+			d += "<p style='font-size:75%'>" + fname + "...</p></div>";
+			d += "<div class='content col-md-6 col-xs-6'><label>Address : </label>";
+			d += "<p style='font-size:70%'>" + addr + "</p></div>";
+			d += "<div class='content col-md-2 col-xs-2'><img src='./img/search.png' class='img-responsive' width='20' height='20' onclick='location.reload();' >";
+			d +="</div></div>";
+			document.getElementById('info').style.display = 'block' ;
+			document.getElementById('searchdiv').innerHTML=d;
 }
 function removeorder(ele){
 	var e = ele.parentNode.parentNode;
@@ -343,6 +356,7 @@ function removeorder(ele){
 function saveVisit(position){
  
 	var discuss  = document.getElementById('discussion').value;
+	discuss = encodeURIComponent(discuss);
 	var contact = "";
 	var e = document.getElementById("contact");
 	try{
@@ -367,42 +381,76 @@ function saveVisit(position){
 		str += document.getElementById('ii'+i).innerHTML + "-" + document.getElementById('qq'+i).innerHTML + "<br>";
 		order.details.push({ 
 				"item" : document.getElementById('ii'+i).innerHTML,
-				"qty"  : document.getElementById('qq'+i).innerHTML,
-				"price"       : document.getElementById('pp'+i).innerHTML 
+				"qty"  : HtmlEncode(document.getElementById('qq'+i).innerHTML),
+				"price"       : encodeURIComponent(document.getElementById('pp'+i).innerHTML) 
 		});
 	}
 	
 	
 	// define next visit array
 	if(document.getElementById('nxtvisit').checked){
-		var visit = [document.getElementById('r2').value,document.getElementById('r3').value];
+		var visit = [document.getElementById('r2').value,encodeURIComponent(document.getElementById('r3').value)];
 	}
 	else
 		var visit = ['',''];
 	
 	loc = [position.coords.latitude,position.coords.longitude];
+		
+	saveMeetingDetails(discussion,order,visit,loc[0],loc[1]);
+		
+}
+function HtmlEncode(s)
+{
+  var el = document.createElement("div");
+  el.innerText = el.textContent = s;
+  s = el.innerHTML;
+  return s;
+}
+function preProcess(discussion,order,visit,lat,lng,did){
+	var a = new Array();
 	
-	saveMeetingDetails(discussion,order,visit);
-	//alert("contact : " + JSON.stringify(discussion) + " - " + JSON.stringify(order.details) + " todo: " + JSON.stringify(visit));
+	
+	if(localStorage.tmp!=null && localStorage.tmp.length >2)
+		a = JSON.parse(localStorage.tmp);
+		
+	a.push([discussion,order,visit,lat,lng, new Date(),did]);
+	localStorage.tmp = JSON.stringify(a);	
+}
+function postProcess(){
+	var a = JSON.parse(localStorage.tmp);
+	a.pop();
+	localStorage.tmp = JSON.stringify(a);	
 }
 
-function saveMeetingDetails(discussion,order,visit,){
-	var q = "discussion=" + JSON.stringify(discussion) + "&order=" + JSON.stringify(order.details) + "&visit=" + JSON.stringify(visit) + "&lat=" + loc[0] + "&long=" + loc[1] + "&did=" + did + "&agent=" + localStorage["sid"];
+function saveMeetingDetails(discussion,order,visit,lat,lng){
+      
+	var q = "discussion=" + JSON.stringify(discussion) + "&order=" + JSON.stringify(order.details) + "&visit=" + JSON.stringify(visit) + "&lat=" + lat + "&long=" + lng + "&did=" + did + "&agent=" + localStorage["sid"];
+	preProcess(discussion,order,visit,lat,lng,did);
+	
 	var req = new XMLHttpRequest();
 	req.onreadystatechange = function() {
-		if (req.readyState == 4 && req.status == 200) {
-			if(req.responseText.length < 15)
-				document.getElementById('mainbody').innerHTML = "<p style='font-size:38px;color:#4CAF50;text-align:center;margin-top:200px;'>Success</p><br><p class='text-muted' style='line-height:1.0;text-align:center'><small>Meeting record saved!!</small></p>"
-			else	
-				alert(req.responseText);
-			}
+		if (req.readyState == 4 ) {
+			if (req.status == 200) {
+				if(req.responseText.trim()== "Success"){
+					postProcess();
+					document.getElementById('mainbody').innerHTML = "<p style='font-size:38px;color:#4CAF50;text-align:center;margin-top:200px;'>Success</p><br><p class='text-muted' style='line-height:1.0;text-align:center'><small>Meeting record saved!!</small></p>";
+								
+					}
+				else	
+					document.getElementById('errmsg').innerHTML = "Error in saving. Try to SYNC after sometime.";
+					//alert(req.responseText);
+				}
+			else
+				document.getElementById('errmsg').innerHTML = "Error in saving. Try to SYNC after sometime.";
+			}	
 		
 		};
-		//var base_url = "http://theqalabs.com/track/";
+		var base_url = "http://theqalabs.com/track11/";
 		req.open("POST", base_url + "/saveMeeting.php", true);
 		req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		req.send(q);
-		//alert(q);
+  
+  
 }
 
 getDropDownData('order','item_list_01');
