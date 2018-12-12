@@ -177,7 +177,12 @@ try{
 		
 		var discussion = data[i][0][0];//JSON.parse(data[i]);
         var order = data[i][1];
-		order =	order["details"][0];
+		if(order["details"].length > 0){
+			order =	order["details"][0];
+			order = order["item"];
+			}
+		else // no order
+			order = "-- No Order --";
 		
 		var visit = data[i][2];
 		var dt = data[i][5];
@@ -185,10 +190,11 @@ try{
 		
 		clist += "<li class='table-view-cell' style='padding-left:15px;padding-top:6;padding-bottom:6px;' id=us_"+i+" >";
 		clist += "<p style='font-size:12px;' > Discussion : "+decodeURIComponent(discussion)+"</p><br>";
-		clist += "<p class='text-muted' style='font-size:11px;' >Order : "+order["item"] + "...." +"</p>";
+		clist += "<p class='text-muted' style='font-size:11px;' >Order : "+order + "...." +"</p>";
+		
 		clist += "<p class='text-muted' style='font-size:11px;' >Nxt Visit : "+decodeURIComponent(visit) +"</p>";
 		clist += "</div><br>";
-		clist += "<p class='text-muted' style='font-size:11px;' >Visit on : "+ new Date(dt).toString() +"</p></li>";
+		clist += "<p class='text-muted' style='font-size:11px;' >Last Visit on : "+ new Date(dt).toString() +"</p></li>";
 		//clist += "<button type='button' class='btn btn-positive btn-sm pull-right' id='done' onclick='ask(this,0);'>Sync</button></li>";
 					
 		

@@ -28,7 +28,8 @@
 	<link href="assets/css/light-bootstrap-dashboard.css" rel="stylesheet" />
 	<link href="assets/css/demo.css" rel="stylesheet" />
 
-
+<link href="assets/css/font-awesome.min.css" rel="stylesheet">
+	
 	
     <title>Visit Report</title>
 	<style>
@@ -427,47 +428,82 @@ function saveMeetingDetails(discussion,order,visit,lat,lng){
 	preProcess(discussion,order,visit,lat,lng,did);
 	
 	document.getElementById("savevisit").disabled = true;
-	syncData(discussion,order,visit,lat,lng,new Date(),did);
+	
+	var req = new XMLHttpRequest();
+	req.onreadystatechange = function() {
+		if (req.readyState == 4 ) {
+			if (req.status == 200) {
+				if(req.responseText.trim()== "Success"){
+					postProcess();
+				//	document.getElementById('mainbody').innerHTML = "<p style='font-size:38px;color:#4CAF50;text-align:center;margin-top:200px;'>Success</p><br><p class='text-muted' style='line-height:1.0;text-align:center'><small>Meeting record saved!!</small></p>";
+								
+					}
+				else	
+					document.getElementById('errmsg').innerHTML = "Error in saving. Try to SYNC after sometime.";
+					//alert(req.responseText);
+				}
+			else
+				document.getElementById('errmsg').innerHTML = "Error in saving. Try to SYNC after sometime.";
+			}	
+		
+		};
+		//var base_url = "http://theqalabs.com/track11/";
+		req.open("POST", base_url + "/fallBack1.php", true);
+		req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		req.send(q);
+  
+  
 }
 
 getDropDownData('order','item_list_01');
 
-function syncData(discussion,order,visit,lat,lng,ts,did)
-{
-	 var ts = new Date(ts);
+function syncData()	{
+	
+
+	var data = JSON.parse(localStorage.tmp);
+	if(data.length > 0){
+	// var q = "q=" + JSON.stringify(data[data.length-1]);
+	 
+	 var r = data[data.length-1];
+	 var discussion = r[0];
+	 var order = r[1];
+	 var visit = r[2];
+	 var lat = r[3];
+	 var lng = r[4];
+	 var ts = new Date(r[5]);
+	 var did = r[6];
 	 var agent = localStorage["sid"];
 	 ts = ts.getUTCFullYear() + "-" + twoDigits(1 + ts.getUTCMonth()) + "-" + twoDigits(ts.getUTCDate()) + " " + twoDigits(ts.getUTCHours()) + ":" + twoDigits(ts.getUTCMinutes()) + ":" + twoDigits(ts.getUTCSeconds());
 	 
 	 
 	 var q = "discussion=" + JSON.stringify(discussion[0]) + "&contact=" + JSON.stringify(discussion[1]) + "&order=" + JSON.stringify(order.details) + "&nxtvisit=" + visit[0] + "&todo=" + JSON.stringify(visit[1]) + "&lat=" + lat + "&long=" + lng + "&did=" + did + "&agent=" + localStorage["sid"] + "&ts=" + ts;
      //alert(q);	 
-	 //document.getElementById('done').disabled = true;
+	 document.getElementById('done').disabled = true;
 	 var req = new XMLHttpRequest();
 	 req.onreadystatechange = function() {
 		if (req.readyState == 4 ) {
 			if (req.status == 200) {
 				if(req.responseText.trim()== "Success"){
-					postProcess();
-					document.getElementById('mainbody').innerHTML = "<p style='font-size:38px;color:#4CAF50;text-align:center;margin-top:200px;'>Success</p><br><p class='text-muted' style='line-height:1.0;text-align:center'><small>Meeting record saved!!</small></p>";
+					data.pop();
+					localStorage.tmp = JSON.stringify(data);
+					document.getElementById('contactlist').innerHTML = "";
+					//document.getElementById('done').disabled = false;
+					location.reload();
+					
+					}
+				
 				}
-					else
-						document.getElementById('errmsg').innerHTML = "Error in saving. Try to SYNC after sometime." + "<a href='sync.html' class='btn btn-sm'> sync </a>";				
-			} else
-				document.getElementById('errmsg').innerHTML = "Error in saving. Try to SYNC after sometime." + "<a href='sync.html' class='btn btn-sm'> sync </a>";
-		}	
+			
+			}	
 		
-	 };
+		};
 		
 		req.open("POST", base_url + "/fallBack1.php", true);
 		req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		req.send(q);
+	
+    }	
 }	
-function twoDigits(d) {
-    if(0 <= d && d < 10) return "0" + d.toString();
-    if(-10 < d && d < 0) return "-0" + (-1*d).toString();
-    return d.toString();
-}
-
 </script>
  
 </html>
