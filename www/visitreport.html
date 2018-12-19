@@ -311,7 +311,8 @@ function getLocation(){
       navigator.geolocation.getCurrentPosition(saveVisit,onError);
 }
 function onError(error) {
-		loc = ["0","0"];		
+		loc = ["0","0"];
+		document.getElementById('errmsg').innerHTML = "Unable to get device location. Enable GPRS.";			
     }
 
 	  
@@ -362,6 +363,7 @@ function saveVisit(position){
 	 contact = e.options[e.selectedIndex].text;
 	}catch(err) {
 	 contact =""
+	 document.getElementById('errmsg').innerHTML = "Unable to get Contact.";		
 	}
 	
 	//define discussion array
@@ -408,12 +410,16 @@ function HtmlEncode(s)
 function preProcess(discussion,order,visit,lat,lng,did){
 	var a = new Array();
 	
-	
+	try{
 	if(localStorage.tmp!=null && localStorage.tmp.length >2)
 		a = JSON.parse(localStorage.tmp);
 		
 	a.push([discussion,order,visit,lat,lng, new Date(),did]);
 	localStorage.tmp = JSON.stringify(a);	
+	
+	} catch (e){
+		document.getElementById('errmsg').innerHTML = "Error in preProcessing." ;		
+	}
 }
 function postProcess(){
 	var a = JSON.parse(localStorage.tmp);
