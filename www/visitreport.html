@@ -316,7 +316,7 @@ function getLocation(){
       //navigator.geolocation.getCurrentPosition(saveVisit,onError);
 }
 function onError(error) {
-		document.getElementById('errmsg').innerHTML = "Some error in Saving";
+		document.getElementById('errmsg').innerHTML = "Some error in Saving ." + error.message + " err code : " + error.code;
 		loc = ["0","0"];
 		document.getElementById('errmsg').innerHTML = "Unable to get device location. Enable GPRS.";			
     }
