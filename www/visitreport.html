@@ -308,15 +308,16 @@ function handleClick(cb) {
 
 function getLocation(){
 		
-	  if (navigator.geolocation) {
+	 /** if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(saveVisit,onError, { timeout: 4000 });
 	  } else {
 			document.getElementById('errmsg').innerHTML = "ERROR: Unable to get device location. Enable GPRS.";
 	  }	
-      //navigator.geolocation.getCurrentPosition(saveVisit,onError);
+	  **/
+      navigator.geolocation.getCurrentPosition(saveVisit,onError);
 }
 function onError(error) {
-		document.getElementById('errmsg').innerHTML = "Some error in Saving ." + error.message + " err code : " + error.code;
+		document.getElementById('errmsg').innerHTML = "Some error in Location ." + error.message + " err code : " + error.code;
 		loc = ["0","0"];
 		document.getElementById('errmsg').innerHTML = "Unable to get device location. Enable GPRS.";			
     }
