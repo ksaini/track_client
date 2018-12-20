@@ -309,7 +309,7 @@ function handleClick(cb) {
 function getLocation(){
 		
 	  if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(saveVisit,onError);
+			navigator.geolocation.getCurrentPosition(saveVisit,onError, { timeout: 4000 });
 	  } else {
 			document.getElementById('errmsg').innerHTML = "ERROR: Unable to get device location. Enable GPRS.";
 	  }	
