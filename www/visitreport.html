@@ -307,10 +307,16 @@ function handleClick(cb) {
 }
 
 function getLocation(){
-	
-      navigator.geolocation.getCurrentPosition(saveVisit,onError);
+		
+	  if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(saveVisit,onError);
+	  } else {
+			document.getElementById('errmsg').innerHTML = "ERROR: Unable to get device location. Enable GPRS.";
+	  }	
+      //navigator.geolocation.getCurrentPosition(saveVisit,onError);
 }
 function onError(error) {
+		document.getElementById('errmsg').innerHTML = "Some error in Saving";
 		loc = ["0","0"];
 		document.getElementById('errmsg').innerHTML = "Unable to get device location. Enable GPRS.";			
     }
@@ -354,6 +360,7 @@ function removeorder(ele){
 }
 
 function saveVisit(position){
+	document.getElementById('errmsg').innerHTML = "Starting Saving";
  
 	var discuss  = document.getElementById('discussion').value;
 	discuss = encodeURIComponent(discuss);
@@ -377,6 +384,7 @@ function saveVisit(position){
 	var newitem = document.getElementById("newitem");
 	var child = newitem.firstChild;
 	
+	document.getElementById('errmsg').innerHTML = "Before Parsing";
 	var str='';
 	for(var i=1;i<=c;i++){
 		str += document.getElementById('ii'+i).innerHTML + "-" + document.getElementById('qq'+i).innerHTML + "<br>";
@@ -394,9 +402,11 @@ function saveVisit(position){
 	}
 	else
 		var visit = ['',''];
+		
+	document.getElementById('errmsg').innerHTML = "After Parsing";	
 	
 	loc = [position.coords.latitude,position.coords.longitude];
-		
+	document.getElementById('errmsg').innerHTML = "loc : " + loc[0];	
 	saveMeetingDetails(discussion,order,visit,loc[0],loc[1]);
 		
 }
@@ -430,6 +440,7 @@ function postProcess(){
 function saveMeetingDetails(discussion,order,visit,lat,lng){
       
 	var q = "discussion=" + JSON.stringify(discussion) + "&order=" + JSON.stringify(order.details) + "&visit=" + JSON.stringify(visit) + "&lat=" + lat + "&long=" + lng + "&did=" + did + "&agent=" + localStorage["sid"];
+	document.getElementById('errmsg').innerHTML = "Before Preprocess";
 	preProcess(discussion,order,visit,lat,lng,did);
 	
 	document.getElementById("savevisit").disabled = true;
