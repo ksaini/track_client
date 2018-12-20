@@ -314,7 +314,8 @@ function getLocation(){
 			document.getElementById('errmsg').innerHTML = "ERROR: Unable to get device location. Enable GPRS.";
 	  }	
 	  **/
-      navigator.geolocation.getCurrentPosition(saveVisit,onError);
+     // navigator.geolocation.getCurrentPosition(saveVisit,onError);
+	 navigator.geolocation.getCurrentPosition(saveVisit,onError, { timeout: 4000 });
 }
 function onError(error) {
 		document.getElementById('errmsg').innerHTML = "Some error in Location ." + error.message + " err code : " + error.code;
